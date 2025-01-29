@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #4CAF50, #2196F3);
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .weather-card {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+            width: 450px;
+        }
+
+        .weather-card:hover {
+            transform: scale(1.05);
+        }
+
+        #city-input {
+            padding: 15px;
+            margin: 10px 0;
+            width: 70%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        #city-input:focus {
+            outline: none;
+            border-color: #2196F3;
+        }
+
+        #city-input::placeholder {
+            color: #aaa;
+        }
+
+        #city-input-btn {
+            padding: 10px;
+            background-color: #2196F3;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #city-input-btn:hover {
+            background-color: #1565C0;
+        }
+
+        #weather-info {
+            display: none;
+        }
+
+        #weather-icon {
+            width: 100px;
+            height: 100px;
+        }
+
+        #temperature {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+
+        #description {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        #wind-speed {
+            font-size: 16px;
+            color: rgb(255, 0, 0);
+        }
+
+        #date {
+            font-size: 14px;
+            color: rgb(255, 0, 0);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="weather-card">
+            <h1 style="color: green;">Weather App</h1>
+            <h3>Get Current Weather</h3>
+            <input type="text" id="city-input" placeholder="Enter city name">
+            <button id="city-input-btn" onclick="weatherFn()">Get Weather</button>
+            <div id="weather-info">
+                <h3 id="city-name"></h3>
+                <p id="date"></p>
+                <img id="weather-icon" src="" alt="Weather Icon">
+                <p id="temperature"></p>
+                <p id="description"></p>
+                <p id="wind-speed"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const apiKey = 'f00c38e0279b7bc85480c3fe775d518c'; // Replace with your OpenWeather API key
+
+        async function weatherFn() {
+            const city = document.getElementById("city-input").value.trim();
+            if (!city) {
+                alert("Please enter a city name!");
+                return;
+            }
+
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (response.ok) {
+                    weatherShowFn(data);
+                } else {
+                    alert("City not found. Please try again.");
+                }
+            } catch (error) {
+                console.error("Error fetching weather data:", error);
+                alert("Failed to fetch weather data.");
+            }
+        }
+
+        function weatherShowFn(data) {
+            document.getElementById("city-name").textContent = data.name;
+            document.getElementById("date").textContent = new Date().toLocaleString();
+            document.getElementById("temperature").textContent = `${data.main.temp}°C`;
+            document.getElementById("description").textContent = data.weather[0].description;
+            document.getElementById("wind-speed").textContent = `Wind Speed: ${data.wind.speed} m/s`;
+            document.getElementById("weather-icon").src = `https://openweathermap.org/img/wn/${data.weather[0].icon}.png`;
+            document.getElementById("weather-info").style.display = "block";
+        }
+    </script>
+</body>
+</html>

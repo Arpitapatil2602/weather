@@ -15,3 +15,5 @@ API: OpenWeatherMap (or any weather API)
 Make sure you have:
 
 Node.js installed (v14+ recommended)
+📸 Demo
+https://drive.google.com/file/d/1gxxda57apCHq9CfvXsRp_IodFRePMMHb/view?usp=sharing
